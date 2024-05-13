@@ -1,9 +1,14 @@
-import Link from "next/link"
+// import { prisma } from "@/db";
+import Link from "next/link";
 
 export default function Home() {
+
+  // const getData = prisma.users.findMany()
+
+  // console.log("getData", getData)
   return (
-    <div>
-      <Link href="/login">Login</Link>
-    </div>
+    <>
+      <Link href="/addbooks"> Fetch Data </Link>
+    </>
   );
 }
