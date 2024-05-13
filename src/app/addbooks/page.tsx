@@ -6,19 +6,20 @@ import { redirect } from "next/navigation";
 import { migrate } from "../api/migration";
 import { postUserDetail } from "../api/database";
 import { POST } from "../api/users/route";
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const [data, setData] = useState({});
+  const router = useRouter()
 
   const handleChange = (value: string, field: string) => {
-    // console.log("field", field);
     setData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleClick = async (e) => {
     e.preventDefault();
     console.log("data",data);
-    // POST(data).then(("res")=>console.log())
+
     fetch("http://localhost:3000/api", {
         method:"POST",
         headers: {
@@ -26,7 +27,7 @@ export default function Home() {
             'Content-Type': 'application/json'
           },
         body: JSON.stringify(data)
-    }).then((res)=>console.log("respone", res)).catch((err)=>console.log("respone", err))
+    }).then((res)=>router.push("/listBooks") ).catch((err)=>console.log("respone", err))
 
   };
 
@@ -83,14 +84,14 @@ export default function Home() {
         </div>
         <div className="relative  px-10">
           <input
-            id="yearOfRelease"
+            id="releaseYear"
             type="text"
             className="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-blue-500 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder=" "
-            onChange={(e) => handleChange(e.target.value, "yearOfRelease")}
+            onChange={(e) => handleChange(e.target.value, "releaseYear")}
           />
           <label
-            htmlFor="yearOfRelease"
+            htmlFor="releaseYear"
             className="absolute  px-10 text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
           >
             Year Of Release

@@ -2,29 +2,18 @@ import sqllite3 from "sqlite3";
 import { open } from "sqlite";
 const sqlite3 = require("sqlite3").verbose();
 
-// let db = new sqlite3.Database(
-//   "../../.././books1DB.db",
-//   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
-//   (err) => {
-//     if (err) {
-//       return console.error(err.message);
-//     }
-//     console.log("Connected to the SQlite database.");
-//   }
-// );
 let db = null
-const databaseDirectory = __dirname + '../../../addBookDB1.db';
 
 
 export async function GET() {
   if (!db) {
     db = await open({
-      filename: databaseDirectory,
+      filename: "./addBookDB1.db",
       driver: sqlite3.Database,
     });
   }
 
-  const bookList = await db.all("select * from  books2");
+  const bookList = await db.all("select * from  books4");
 
   return new Response(JSON.stringify(bookList), {
     headers: { "Content-Type": "application/json" },
@@ -32,16 +21,22 @@ export async function GET() {
   });
 }
 
-export async function POST(data: Object) {
+export async function POST(data) {
+  data=await data.json()
+  
   if (!db) {
     db = await open({
-      filename: databaseDirectory,
+      filename: "./addBookDB1.db",
       driver: sqlite3.Database,
     });
   }
   const { name, description, author, releaseYear } = data;
-  const insertSql = `INSERT INTO books2(name, description, author, releaseYear) VALUES(?, ?, ?, ?)`;
-  const values = ["abcd", "abcd", "abcd", "abcd"];
+  const insertSql = `INSERT INTO books4(name, description, author, releaseYear) VALUES(?, ?, ?, ?)`;
+  const values = [data.name, data.description, data.author, data.releaseYear];
+
+  console.log("values", values)
+
+  console.log("data", data)
 
   await db.run(insertSql, values, (err) => {
     if (err) {

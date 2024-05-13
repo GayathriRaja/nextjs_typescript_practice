@@ -1,8 +1,11 @@
 
 const sqlite3 = require("sqlite3").verbose();
 
+const connect=async()=>{
+
+
 // Connecting to or creating a new SQLite database file
-const db = new sqlite3.Database(
+const db =await new sqlite3.Database(
   "./addBookDB1.db",
   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
   (err) => {
@@ -13,15 +16,19 @@ const db = new sqlite3.Database(
   }
 );
 
-db.serialize(() => {
+// const a=await db.all("select * from books4",[], (err, rows) => {
+//   if (err) {
+//     throw err;
+//   }
+//   rows.forEach((row) => {
+//     console.log(row.name);
+//   });
+// });
+// console.log(a);
 
-  db.run(`CREATE TABLE books4 (
-    id INTEGER primary key AUTOINCREMENT,
-    name TEXT,
-    description TEXT,
-    author TEXT,
-    releaseYear TEXT
-  )`),
+await db.serialize(() => {
+
+  db.run(`select * from books4`),
   (err) => {
     if (err) {
       return console.error(err.message);
@@ -29,8 +36,8 @@ db.serialize(() => {
     console.log("created books table");
   }
 })
-// db.serialize(()=>{
-// })
+db.serialize(()=>{
+})
 
 // // Serialize method ensures that database queries are executed sequentially
 // db.serialize(() => {
@@ -113,6 +120,12 @@ db.serialize(() => {
 //           console.log(`Rows inserted, ID ${id}`);
 //         });
 
+//         db.get("select * from items",[],(err,row)=>{
+//           console.log(row);
+//         })
+
+        
+
 //         //   Close the database connection after all insertions are done
 //         db.close((err) => {
 //           if (err) {
@@ -144,3 +157,9 @@ db.serialize(() => {
 //       console.log("Inserted into the books table.");
 //     })
 // }
+
+// db.close();
+ 
+}
+
+connect()
